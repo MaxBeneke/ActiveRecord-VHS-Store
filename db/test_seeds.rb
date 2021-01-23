@@ -227,15 +227,14 @@ end
 #########################    Attempted Fix      #########################
 
 ## Count number of times each VHS is rented
-# vhs_copies = {}
-# Rental.all.each do |rental|
-#     vhs_copies[rental.vhs.id].nil? ? vhs_copies[rental.vhs.id] = 1 : vhs_copies[rental.vhs.id] += 1
-# end
+vhs_copies = {}
+Rental.all.each do |rental|
+    vhs_copies[rental.vhs.id].nil? ? vhs_copies[rental.vhs.id] = 1 : vhs_copies[rental.vhs.id] += 1
+end
 
-# # #Get array of duplicated VHS ids
-vhs_id_rentals = Rental.count_by_vhs_id
+# #Get array of duplicated VHS ids
 
- duplicate_vhs_ids = vhs_id_rentals.select {|vhs_id, count| count > 1}.keys
+duplicate_vhs_ids = vhs_id_rentals.select {|vhs_id, count| count > 1}.keys
 
 # # sets all rentals for duplicated ids to returned EXCEPT for the most recent rental
 duplicate_vhs_ids.each do |vhs_id|
