@@ -17,7 +17,7 @@ def create_movie_joins(movie, genre_array)
 end
 
 ####### GENRES ########
-puts ":sparkles: creating genres... :sparkles:"
+puts "✨ creating genres... ✨"
 
 action = Genre.create(name: "action")
 adaptation = Genre.create(name: "adaptation")
@@ -42,14 +42,14 @@ thriller = Genre.create(name: "thriller")
 war = Genre.create(name: "war")
 
 ####### MOVIES ########
-puts ":sparkles: creating movies and movie_genres... :sparkles:"
+puts "✨ creating movies and movie_genres... ✨"
 
 the_color_purple = Movie.create(
     title: "The Color Purple",
     year: 1985,
     length: 154,
     director: "Steven Spielberg",
-    description: "Whoopi Goldberg brings Alice Walker's Pulitzer Prize-winning feminist novel to life as Celie, a Southern woman who suffered abuse over decades. A project brought to a hesitant Steven Spielberg by producer Quincy Jones, the film marks Spielberg's first female lead.",
+    description: "Whoopi Goldberg brings Alice Walker’s Pulitzer Prize-winning feminist novel to life as Celie, a Southern woman who suffered abuse over decades. A project brought to a hesitant Steven Spielberg by producer Quincy Jones, the film marks Spielberg’s first female lead.",
     female_director: false
 )
 create_movie_joins(the_color_purple, [adaptation, historical_period_drama, drama])
@@ -119,7 +119,7 @@ alien = Movie.create(
             year: 1979,
             length: 117,  
             director: "Ridley Scott",
-            description: "Groundbreaking for 1979 science fiction, Sigourney Weaver's Ellen Ripley is one of the genre's most iconic female characters. She's not a damsel—she's a badass final girl and the only survivor to defeat the monster that mutilated and destroyed every other member of the Nostromo crew.",
+            description: "Groundbreaking for 1979 science fiction, Sigourney Weaver’s Ellen Ripley is one of the genre’s most iconic female characters. She’s not a damsel—she’s a badass final girl and the only survivor to defeat the monster that mutilated and destroyed every other member of the Nostromo crew.",
             female_director: false
 )
 create_movie_joins(alien, [horror, sci_fi])
@@ -129,7 +129,7 @@ mad_max = Movie.create(
             year: 2015,
             length: 140,
             director: "George Miller",
-            description: "Unearthing feminism in a scorched, hell-on-wheels action flick from road warrior franchise man George Miller isn't exactly obvious. But though it's titled after a male character, he is muzzled for much of the film, lending the action to a female imperator and her feminist revolt against the horrors of sexism.",
+            description: "Unearthing feminism in a scorched, hell-on-wheels action flick from road warrior franchise man George Miller isn’t exactly obvious. But though it’s titled after a male character, he is muzzled for much of the film, lending the action to a female imperator and her feminist revolt against the horrors of sexism.",
             female_director: false
 )
 create_movie_joins(mad_max, [action, adventure, thriller, sci_fi])
@@ -149,7 +149,7 @@ girlhood = Movie.create(
             year: 2014,
             length: 113,
             director: "Céline Sciamma",
-            description: "Céline Sciamma's Girlhood, a contemporary narrative with a classic plot that isn't too distant from anything in the Jane Austen canon, follows a French teenager's slog through gang life on a quest to self-discovery.",
+            description: "Céline Sciamma’s Girlhood, a contemporary narrative with a classic plot that isn’t too distant from anything in the Jane Austen canon, follows a French teenager’s slog through gang life on a quest to self-discovery.",
             female_director: true
 )
 create_movie_joins(girlhood, [drama])
@@ -175,33 +175,33 @@ babadook = Movie.create(
 create_movie_joins(babadook, [horror, drama, thriller, mystery])
 
 ####### CLIENTS ########
-puts ":sparkles: creating clients... :sparkles:"
+puts "✨ creating clients... ✨"
 
-20.times do
+20.times do 
     name = [
-        Faker::Movies::HitchhikersGuideToTheGalaxy.character,
+        Faker::Movies::HitchhikersGuideToTheGalaxy.character, 
         Faker::TvShows::TwinPeaks.character,
         Faker::TvShows::TheFreshPrinceOfBelAir.character,
         Faker::TvShows::RuPaul.queen,
         Faker::BossaNova.artist
     ].sample
-    puts ":popcorn: #{name}, welcome to our sick vhs store!"
+    puts "🍿 #{name}, welcome to our sick vhs store!"
     Client.create(
-        name: name,
+        name: name, 
         home_address: Faker::Address.full_address
     )
 end
 
 ####### VHS ########
-puts ":sparkles: creating vhs... :sparkles:"
+puts "✨ creating vhs... ✨"
 
-60.times do
+60.times do 
     random_movie_id = rand(1..Movie.all.count)
     Vhs.create(movie_id: random_movie_id)
 end
 
 ####### Rentals ########
-puts ":sparkles: creating rentals... :sparkles:"
+puts "✨ creating rentals... ✨"
 
 def find_vhs_id_for_rent
     random_vhs_id = rand(1..Vhs.all.count)
@@ -224,60 +224,63 @@ end
         Rental.create(client_id: client_id, vhs_id: vhs_id, current: true)
     end
 end
+
+
 #########################    Attempted Fix      #########################
 
-## Count number of times each VHS is rented
-# vhs_copies = {}
-# Rental.all.each do |rental|
-#     vhs_copies[rental.vhs.id].nil? ? vhs_copies[rental.vhs.id] = 1 : vhs_copies[rental.vhs.id] += 1
-# end
+#Count number of times each VHS is rented
+    vhs_copies = {}
+    Rental.all.each do |rental| 
+        vhs_copies[rental.vhs.id].nil? ? vhs_copies[rental.vhs.id] = 1 : vhs_copies[rental.vhs.id] += 1 
+    end
+#  vhs_id_rentals = Rental.count_by_vhs_id
+# Get array of duplicated VHS ids
 
-# # #Get array of duplicated VHS ids
-vhs_id_rentals = Rental.count_by_vhs_id
+duplicate_vhs_ids = vhs_copies.select {|vhs_id, count| count > 1}.keys
 
- duplicate_vhs_ids = vhs_id_rentals.select {|vhs_id, count| count > 1}.keys
-
-# # sets all rentals for duplicated ids to returned EXCEPT for the most recent rental
+# sets all rentals for duplicated ids to returned EXCEPT for the most recent rental
 duplicate_vhs_ids.each do |vhs_id|
-this_ids_rentals = Rental.where(vhs_id: vhs_id)
-times_rented = this_ids_rentals.count
-index = 0
+    this_ids_rentals = Rental.where(vhs_id: vhs_id)
+    times_rented = this_ids_rentals.count
+    index = 0
 
-while index < (times_rented - 1) do
-    rented_date = Faker::Date.between(from: ('2014-09-01'.to_date + index*7.days), to: ('2014-09-03'.to_date + index*7.days))
-    returned_date = Faker::Date.between(from: ('2014-09-05'.to_date + index*7.days), to: ('2014-09-08'.to_date + index*7.days))
-    rental = this_ids_rentals[index]
-    rental.update(current: false,  created_at: rented_date, updated_at: returned_date)
-    index += 1
-end
+    while index < (times_rented - 1) do
+        rented_date = Faker::Date.between(from: ('2014-09-01'.to_date + index*7.days), to: ('2014-09-03'.to_date + index*7.days))
+        returned_date = Faker::Date.between(from: ('2014-09-05'.to_date + index*7.days), to: ('2014-09-08'.to_date + index*7.days))
+        rental = this_ids_rentals[index]
+        rental.update(current: false,  created_at: rented_date, updated_at: returned_date)
+        index += 1
+    end
 end
 
-# # Get remaining active rental count.
+# Get remaining active rental count.
 active_rentals = Rental.all.where(current: true)
 
-# #Select 55% of remaining active_rentals to return on tiime, and 25% to return late. 20% will remain active
+#Select 55% of remaining active_rentals to return on tiime, and 25% to return late. 20% will remain active
 returned_on_date_number = (active_rentals.count * 0.55).ceil
 returned_late_number = (active_rentals.count * 0.25).ceil
 
 index = 0
 
-# # make some of the rentals be returned on time --- Rental date must fall after earlier rentals. 2 months later should work unless 1 vhs randlom gets 9 copies...
+# make some of the rentals be returned on time --- Rental date must fall after earlier rentals. 2 months later should work unless 1 vhs randlom gets 9 copies...
 returned_on_date_number.times do
-rented_date = Faker::Date.between(from: '2014-11-01', to: '2014-11-03')
-returned_date = Faker::Date.between(from: '2014-11-05', to: '2014-11-08')
-rental = Rental.find_by(id: active_rentals[index].id)
-rental.update(current: false,  created_at: rented_date, updated_at: returned_date)
-index += 1
+    rented_date = Faker::Date.between(from: '2014-11-01', to: '2014-11-03')
+    returned_date = Faker::Date.between(from: '2014-11-05', to: '2014-11-08')
+    rental = Rental.find_by(id: active_rentals[index].id)
+    rental.update(current: false,  created_at: rented_date, updated_at: returned_date)
+    index += 1
 end
 
-# # make some of the rentals be returned late
+# make some of the rentals be returned late
 returned_late_number.times do
-rented_date = Faker::Date.between(from: '2014-11-01', to: '2014-11-03')
-returned_date = Faker::Date.between(from: '2015-06-15', to: 2.days.ago)
-rental = rental = Rental.find_by(id: active_rentals[index].id)
-index += 1
-rental.update(current: false,  created_at: rented_date, updated_at: returned_date)
+    rented_date = Faker::Date.between(from: '2014-11-01', to: '2014-11-03')
+    returned_date = Faker::Date.between(from: '2015-06-15', to: 2.days.ago)
+    rental = rental = Rental.find_by(id: active_rentals[index].id)
+    index += 1
+    rental.update(current: false,  created_at: rented_date, updated_at: returned_date)
 end
-################################### END OF FIX ################################
 
-puts ":vhs: :vhs: :vhs: :vhs: SEEDED :vhs: :vhs: :vhs: :vhs: "
+Genre.create(name: "apocalypse")
+
+
+puts "📼 📼 📼 📼 SEEDED 📼 📼 📼 📼 "
